@@ -73,6 +73,12 @@
             font-weight: 600;
         }
 
+        .btn-kost:hover{
+            background: black;
+            color: white;
+            transition: .3s;
+        }
+
         .stats{
             margin-top: 80px;
         }
@@ -129,19 +135,15 @@
                 <ul class="navbar-nav">
 
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            HOME
+                        <a class="nav-link {{ request()->is('search') ? 'active' : '' }}"
+                        href="/search">
+                            Search
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            Categories
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link {{ request()->is('contact') ? 'active' : '' }}"
+                        href="/contact">
                             Contact Us
                         </a>
                     </li>
@@ -220,9 +222,10 @@
                         dan fasilitas yang berkualitas
                     </p>
 
-                    <button class="btn-kost">
+                    <a href="/search" button class="btn-kost" >
                         Cari Kost
-                    </button>
+                    </a>
+
 
                     <!-- Statistik -->
                     <div class="row stats text-center">

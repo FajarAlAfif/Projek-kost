@@ -33,13 +33,25 @@ class KostController extends Controller
         ]);
 
         $kost = Kost::create([
-            'user_id' => auth()->id(),
+
+            'user_id' => 1,
+
             'nama_kost' => $request->nama_kost,
             'alamat' => $request->alamat,
             'daerah' => $request->daerah,
             'harga' => $request->harga,
             'deskripsi' => $request->deskripsi,
-            'rating' => 0
+
+            'rating' => 0,
+
+            'wifi' => $request->has('wifi'),
+            'ac' => $request->has('ac'),
+            'kamar_mandi' => $request->has('kamar_mandi'),
+            'parkiran' => $request->has('parkiran'),
+            'dapur' => $request->has('dapur'),
+            'laundry' => $request->has('laundry'),
+            'cctv' => $request->has('cctv')
+
         ]);
 
         if ($request->hasFile('image')) {
@@ -63,5 +75,29 @@ class KostController extends Controller
         return redirect()
             ->route('admin.kost.index')
             ->with('success', 'Data berhasil ditambahkan');
+    }
+
+    public function destroy($id)
+    {
+        $kost = Kost::with('images')->findOrFail($id);
+
+        foreach ($kost->images as $image) {
+
+            $path = public_path(
+                'uploads/kost/' . $image->image
+            );
+
+            if (file_exists($path)) {
+                unlink($path);
+            }
+
+            $image->delete();
+        }
+
+        $kost->delete();
+
+        return redirect()
+            ->route('admin.kost.index')
+            ->with('success', 'Data kost berhasil dihapus');
     }
 }

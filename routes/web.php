@@ -3,6 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\KostController;
+use App\Http\Controllers\SearchController;
+
+Route::get('/search', [SearchController::class, 'index'])
+    ->name('search');
+
+Route::get('/kost/{id}', [SearchController::class, 'show'])
+    ->name('kost.detail');
 
 Route::get('/admin/kost', [KostController::class, 'index'])
     ->name('admin.kost.index');
@@ -12,6 +19,13 @@ Route::get('/admin/kost/create', [KostController::class, 'create'])
 
 Route::post('/admin/kost/store', [KostController::class, 'store'])
     ->name('admin.kost.store');
+
+Route::delete('/admin/kost/{id}',
+    [KostController::class, 'destroy'])
+    ->name('admin.kost.destroy');
+
+Route::view('/contact', 'contact')->name('contact');
+
 
 
 Route::get('/', function () {
@@ -65,3 +79,4 @@ Route::get('/logout', function () {
 
     return redirect('/');
 });
+

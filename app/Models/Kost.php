@@ -7,13 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class Kost extends Model
 {
     protected $fillable = [
-        'user_id',
-        'nama_kost',
-        'alamat',
-        'daerah',
-        'harga',
-        'deskripsi',
-        'rating'
+    'user_id',
+    'nama_kost',
+    'alamat',
+    'daerah',
+    'harga',
+    'deskripsi',
+    'rating',
+
+    'wifi',
+    'ac',
+    'kamar_mandi',
+    'parkiran',
+    'dapur',
+    'laundry',
+    'cctv'
     ];
 
     public function images()

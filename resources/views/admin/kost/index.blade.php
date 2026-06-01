@@ -16,6 +16,14 @@
 
     <div class="card-body">
 
+        @if(session('success'))
+
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+
+        @endif
+
         <table class="table align-middle">
 
             <thead>
@@ -26,6 +34,7 @@
                 <th>Daerah</th>
                 <th>Harga</th>
                 <th>Rating</th>
+                <th width="150">Aksi</th>
             </tr>
 
             </thead>
@@ -40,31 +49,64 @@
 
                     @if($kost->images->count())
 
-                    <img src="{{ asset('uploads/kost/'.$kost->images->first()->image) }}"
-                         width="120">
+                    <img
+                        src="{{ asset('uploads/kost/'.$kost->images->first()->image) }}"
+                        width="120"
+                        class="rounded">
 
                     @endif
 
                 </td>
 
-                <td>{{ $kost->nama_kost }}</td>
+                <td>
+                    {{ $kost->nama_kost }}
+                </td>
 
-                <td>{{ $kost->daerah }}</td>
+                <td>
+                    {{ $kost->daerah }}
+                </td>
 
                 <td>
                     Rp {{ number_format($kost->harga,0,',','.') }}
                 </td>
 
-                <td>{{ $kost->rating }}</td>
+                <td>
+                    ⭐ {{ $kost->rating }}
+                </td>
+
+                <td>
+
+                    <form action="{{ route('admin.kost.destroy',$kost->id) }}"
+                          method="POST">
+
+                        @csrf
+                        @method('DELETE')
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Yakin ingin menghapus kost ini?')">
+
+                            Hapus
+
+                        </button>
+
+                    </form>
+
+                </td>
 
             </tr>
 
             @empty
 
             <tr>
-                <td colspan="5" class="text-center">
+
+                <td colspan="6" class="text-center">
+
                     Belum ada data kost
+
                 </td>
+
             </tr>
 
             @endforelse
