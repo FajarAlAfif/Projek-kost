@@ -1,7 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
+@if ($errors->any())
 
+<div class="alert alert-danger">
+
+    <ul class="mb-0">
+
+        @foreach ($errors->all() as $error)
+
+            <li>{{ $error }}</li>
+
+        @endforeach
+
+    </ul>
+
+</div>
+
+@endif
 <h2 class="page-title">
     Tambah Kost
 </h2>
@@ -52,8 +68,10 @@
             <div class="mb-3">
                 <label>Foto Kost</label>
                 <input type="file"
-                    name="image"
-                    class="form-control">
+                    name="images[]"
+                    class="form-control"
+                    multiple
+                    required>
             </div>
 
             <hr>

@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\KostController;
 use App\Http\Controllers\SearchController;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\BookingController;
 
 Route::get('/search', [SearchController::class, 'index'])
     ->name('search');
@@ -24,13 +28,35 @@ Route::delete('/admin/kost/{id}',
     [KostController::class, 'destroy'])
     ->name('admin.kost.destroy');
 
-Route::view('/contact', 'contact')->name('contact');
+Route::get('/contact',
+    [ContactController::class, 'index']);
 
+Route::post('/contact',
+    [ContactController::class, 'store'])
+    ->name('contact.store');
 
+Route::get('/admin/contact',
+    [ContactController::class, 'admin']);
 
 Route::get('/', function () {
     return view('home');
 });
+
+Route::get('/booking/{id}',
+[BookingController::class, 'create']);
+
+Route::post('/booking/store',
+[BookingController::class, 'store']);
+
+Route::get('/admin/booking',
+[BookingController::class, 'index']);
+
+Route::post('/admin/booking/{id}/verify',
+[BookingController::class, 'verify']);
+
+Route::post('/admin/booking/{id}/reject',
+[BookingController::class, 'reject']);
+
 
 Route::get('/login', function () {
     return view('login');
@@ -38,22 +64,57 @@ Route::get('/login', function () {
 
 Route::post('/login', function (Request $request) {
 
-    $email = $request->email;
-    $password = $request->password;
+    $user = User::where(
+        'email',
+        $request->email
+    )->first();
 
-    // Login dummy
-    if($email == 'admin@gmail.com' && $password == '123456'){
+    if(
+        $user &&
+        Hash::check(
+            $request->password,
+            $user->password
+        )
+    ){
 
         session([
             'login' => true,
-            'username' => 'fajar'
+            'user_id' => $user->id,
+            'username' => $user->name
         ]);
 
         return redirect('/');
     }
 
-    return redirect('/login')->with('error', 'Email atau Password salah');
+    return redirect('/login')
+        ->with(
+            'error',
+            'Email atau Password salah'
+        );
 });
+
+Route::get('/register', function () {
+    return view('register');
+});
+
+Route::post('/register', function (Request $request) {
+
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:6'
+    ]);
+
+    User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password)
+    ]);
+
+    return redirect('/login')
+        ->with('success','Registrasi berhasil');
+});
+
 
 Route::get('/profile', function () {
 
@@ -61,18 +122,52 @@ Route::get('/profile', function () {
         return redirect('/login');
     }
 
-    return view('profile');
+    $user = User::find(
+        session('user_id')
+    );
+
+    return view(
+        'profile',
+        compact('user')
+    );
 });
 
 Route::post('/update-profile', function (Request $request) {
 
+    $user = User::find(session('user_id'));
+
+    $user->name = $request->username;
+
+    if(!empty($request->new_password)){
+
+        $user->password = Hash::make(
+            $request->new_password
+        );
+
+    }
+
+    if(
+    $request->new_password !=
+    $request->confirm_password
+    ){
+    return back()->with(
+        'error',
+        'Konfirmasi password tidak sama'
+    );
+}
+    $user->save();
+
     session([
-        'username' => $request->username
+        'username' => $user->name
     ]);
 
-    return redirect('/profile');
-});
+    return redirect('/profile')
+        ->with(
+            'success',
+            'Profile berhasil diupdate'
+        );
 
+});
 Route::get('/logout', function () {
 
     session()->flush();
@@ -80,3 +175,13 @@ Route::get('/logout', function () {
     return redirect('/');
 });
 
+Route::get('/my-booking', function () {
+
+    $bookings = App\Models\Booking::with('kost')
+        ->where('user_id', session('user_id'))
+        ->latest()
+        ->get();
+
+    return view('my-booking', compact('bookings'));
+
+});

@@ -29,12 +29,12 @@ class KostController extends Controller
             'daerah' => 'required',
             'harga' => 'required|numeric',
             'deskripsi' => 'required',
-            'image' => 'required|image'
+            'images' => 'required',
+            'images.*' => 'image|mimes:jpg,jpeg,png,webp'
         ]);
 
         $kost = Kost::create([
-
-            'user_id' => 1,
+            'user_id' => 4,
 
             'nama_kost' => $request->nama_kost,
             'alamat' => $request->alamat,
@@ -51,25 +51,27 @@ class KostController extends Controller
             'dapur' => $request->has('dapur'),
             'laundry' => $request->has('laundry'),
             'cctv' => $request->has('cctv')
-
         ]);
 
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('images')) {
 
-            $file = $request->file('image');
+            foreach ($request->file('images') as $file) {
 
-            $filename = time() . '_' .
-                        $file->getClientOriginalName();
+                $filename =
+                    time().'_'.
+                    rand(1000,9999).'_'.
+                    $file->getClientOriginalName();
 
-            $file->move(
-                public_path('uploads/kost'),
-                $filename
-            );
+                $file->move(
+                    public_path('uploads/kost'),
+                    $filename
+                );
 
-            KostImage::create([
-                'kost_id' => $kost->id,
-                'image' => $filename
-            ]);
+                KostImage::create([
+                    'kost_id' => $kost->id,
+                    'image' => $filename
+                ]);
+            }
         }
 
         return redirect()

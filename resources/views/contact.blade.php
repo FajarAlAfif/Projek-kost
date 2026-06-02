@@ -138,52 +138,77 @@
                             Silakan hubungi kami.
                         </p>
 
-                        <form>
+                        @if(session('success'))
 
-                            <div class="mb-3">
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
 
-                                <label class="form-label">
-                                    Nama
-                                </label>
+                        @endif
 
-                                <input type="text"
-                                    class="form-control"
-                                    placeholder="Masukkan nama">
+                        @if(session('error'))
 
-                            </div>
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
 
-                            <div class="mb-3">
+                        @endif
 
-                                <label class="form-label">
-                                    Email
-                                </label>
+                        <form action="{{ route('contact.store') }}"
+                            method="POST">
 
-                                <input type="email"
-                                    class="form-control"
-                                    placeholder="Masukkan email">
+                        ```
+                        @csrf
 
-                            </div>
+                        <div class="mb-3">
 
-                            <div class="mb-4">
+                            <label class="form-label">
+                                Nama
+                            </label>
 
-                                <label class="form-label">
-                                    Pesan
-                                </label>
+                            <input type="text"
+                                name="name"
+                                class="form-control"
+                                placeholder="Masukkan nama">
 
-                                <textarea class="form-control"
-                                        rows="5"
-                                        placeholder="Tulis pesan anda..."></textarea>
+                        </div>
 
-                            </div>
+                        <div class="mb-3">
 
-                            <div class="text-center">
+                            <label class="form-label">
+                                Email
+                            </label>
 
-                                <button type="submit"
-                                        class="btn-send">
-                                    Kirim Pesan
-                                </button>
+                            <input type="email"
+                                name="email"
+                                class="form-control"
+                                placeholder="Masukkan email">
 
-                            </div>
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label">
+                                Pesan
+                            </label>
+
+                            <textarea
+                                name="message"
+                                class="form-control"
+                                rows="5"
+                                placeholder="Tulis pesan anda..."></textarea>
+
+                        </div>
+
+                        <div class="text-center">
+
+                            <button type="submit"
+                                    class="btn-send">
+                                Kirim Pesan
+                            </button>
+
+                        </div>
+                        ```
 
                         </form>
 

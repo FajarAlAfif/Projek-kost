@@ -40,6 +40,12 @@ body{
     height:120px;
     object-fit:cover;
     border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.thumb:hover{
+    transform:scale(1.05);
 }
 
 .detail-card{
@@ -87,6 +93,7 @@ carikost
 @if($kost->images->count())
 
 <img
+id="mainImage"
 src="{{ asset('uploads/kost/'.$kost->images->first()->image) }}"
 class="main-image">
 
@@ -100,7 +107,9 @@ class="main-image">
 
 <img
 src="{{ asset('uploads/kost/'.$image->image) }}"
-class="thumb">
+class="thumb"
+onclick="changeImage(this.src)"
+style="cursor:pointer">
 
 </div>
 
@@ -210,9 +219,12 @@ Rp{{ number_format($kost->harga,0,',','.') }}
 
 </div>
 
-<button class="btn btn-success w-100 py-3">
-Hubungi Pemilik
-</button>
+<a href="/booking/{{ $kost->id }}"
+   class="btn btn-success w-100 py-3">
+
+    Pesan Kost
+
+</a>
 
 </div>
 
@@ -221,6 +233,15 @@ Hubungi Pemilik
 </div>
 
 </div>
+<script>
 
+function changeImage(src)
+{
+    document
+        .getElementById('mainImage')
+        .src = src;
+}
+
+</script>
 </body>
 </html>

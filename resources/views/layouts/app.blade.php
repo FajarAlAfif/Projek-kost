@@ -156,6 +156,16 @@
                         Pengaturan
                     </a>
 
+                    <a href="/admin/booking" class="menu-item">
+                        <i class="bi bi-mark"></i>
+                        Verifikasi Booking
+                    </a>
+
+                    <a href="/admin/contact" class="menu-item">
+                        <i class="bi bi-send"></i>
+                        Pesan
+                    </a>
+
                 </div>
 
             </div>

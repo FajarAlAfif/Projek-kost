@@ -194,24 +194,14 @@
                         Dashboard
                     </a>
 
-                    <a href="#" class="menu-item">
-                        <i class="bi bi-file-earmark"></i>
-                        New Translation
+                    <a href="/my-booking" class="menu-item">
+                        <i class="bi bi-calendar-check"></i>
+                        Booking Saya
                     </a>
 
-                    <a href="#" class="menu-item">
-                        <i class="bi bi-folder"></i>
-                        History
-                    </a>
-
-                    <a href="#" class="menu-item">
-                        <i class="bi bi-credit-card"></i>
-                        Billing & Payment
-                    </a>
-
-                    <a href="#" class="menu-item">
+                    <a href="/" class="menu-item">
                         <i class="bi bi-gear"></i>
-                        Settings
+                        Home
                     </a>
 
                     <!-- LOGOUT -->
@@ -228,7 +218,21 @@
             <div class="col-lg-9">
 
                 <div class="content">
+                    @if(session('success'))
 
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+
+                    @endif
+
+                    @if(session('error'))
+
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+
+                    @endif
                     <h3 class="page-title">
                         Your personal profile info
                     </h3>
@@ -267,7 +271,7 @@
 
                                     <input type="text"
                                            class="form-control"
-                                           placeholder="Surname">
+                                           placeholder="Lastname">
 
                                 </div>
 
@@ -280,7 +284,7 @@
                                     <input type="text"
                                            name="username"
                                            class="form-control"
-                                           value="{{ session('username') }}"
+                                           value="{{ $user->name }}"
                                            placeholder="Username">
 
                                 </div>
@@ -292,8 +296,9 @@
                                     </label>
 
                                     <input type="email"
-                                           class="form-control"
-                                           placeholder="mail@example.com">
+                                        class="form-control"
+                                        value="{{ $user->email }}"
+                                        readonly>
 
                                 </div>
 
@@ -325,8 +330,9 @@
                                     </label>
 
                                     <input type="password"
-                                           class="form-control"
-                                           placeholder="********">
+                                        name="new_password"
+                                        class="form-control"
+                                        placeholder="Password Baru">
 
                                 </div>
 
@@ -337,8 +343,9 @@
                                     </label>
 
                                     <input type="password"
-                                           class="form-control"
-                                           placeholder="********">
+                                        name="confirm_password"
+                                        class="form-control"
+                                        placeholder="Konfirmasi Password">
 
                                 </div>
 

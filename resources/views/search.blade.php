@@ -26,7 +26,7 @@
         .navbar-brand{
             font-size:42px;
             font-weight:700;
-            color:#17b100;
+            color:#59d61a;
         }
 
         .hero{
@@ -37,7 +37,7 @@
         .hero-title{
             font-size:70px;
             font-weight:700;
-            color:#17b100;
+            color:#59d61a;
         }
 
         .hero-sub{
